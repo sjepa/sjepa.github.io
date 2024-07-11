@@ -25,9 +25,6 @@
 </head>
 
 
-	
-	
-
 <body>
 <div id="main">
   
@@ -78,19 +75,11 @@
 		  </div>
 		</div>
 		
-		<!-- <div class="content has-text-justified">
-			<div class="description">
-				<p style="text-align: left;">
-					Examples of model predictions under noisy skeletons. MaskCLR is more robust to noise, compared to MotionBERT using the same DSTFormer backbone.
-				</p>
-			</div>
-			<img src="./files/robust_recog_003.gif" alt="Gif for Robust Recognition" height="50%">
-		</div> -->
 	
 		<div class="Framework sec">
 			<h2>Framework</h2>
 			<img src="./files/sjepa_arch2.pdf" alt="Framework" width="100%">
-			<p style="text-align: left;"> <strong>First, the 2D skeletons (view) are obtained by the orthographic projection and masking of the 3D ones (target). 
+			<p style="text-align: left;"> <strong>Overview of S-JEPA.</strong> First, the 2D skeletons (view) are obtained by the orthographic projection and masking of the 3D ones (target). 
 				The 2D skeletons are passed through the view encoder, after which learnable mask tokens are inserted at the locations of masked joints to get the 
 				view features. The predictor takes Fv as input and outputs the predicted representations of the 
 				3D skeletons at the locations of the mask tokens. The target representations are obtained by the target encoder, which takes 
@@ -106,31 +95,20 @@
 				</br>
 				<img src="./files/sjepa_table2.png" alt="Results" width="100%">
 				</br>	
-				<!-- <img src="./files/feature_space.png" alt="Results" width="100%"> -->
 			</div>
 		</div>
 		  
-		
-	  	<div class="download_sec">
-			<h2>Resources</h2>
-			<div>
-				<!-- <li><strong>Paper</strong>:  <a href="https://openreview.net/pdf?id=PVpfUEF3ze">OpenReview</a></li> -->
-				<li><strong>Supplementary material</strong>: <a href="https://www.dropbox.com/scl/fi/z5i19n9fkr89q1i29xlei/supplementary.pdf?rlkey=o6tdxlgp44p31af93qx3gnfi9&dl=0">Dropbox link</a></li>
-				<!-- <li><strong>Code</strong>:  Coming soon</li> -->
-				<!-- <a href="https://anonymous.4open.science/r/MaskCLR-A503">Coming soon</a> -->
-
-			</div>
-		</div>
+	
 
 		<div class="citation_sec">
 			<h2>Citation</h2>
 			<p class="bibtex">@inproceedings{lin2023actionlet, 
-			&nbsp;&nbsp; author={Abdelfattah, Mohamed and Alahi, Alexandre}, 
-			&nbsp;&nbsp; booktitle={European Conference on Computer Vision (ECCV)}, 
-			&nbsp;&nbsp; title={S-JEPA: Joint Embedding Predictive Architecture for Self-Supervised Skeletal Action Recognition}, 
-			&nbsp;&nbsp; year={2024}, 
-			&nbsp;&nbsp; organization={Springer}, 
-			&nbsp;&nbsp; }
+			author={Abdelfattah, Mohamed and Alahi, Alexandre}, 
+			booktitle={European Conference on Computer Vision (ECCV)}, 
+			title={S-JEPA: Joint Embedding Predictive Architecture for Self-Supervised Skeletal Action Recognition}, 
+			year={2024}, 
+			organization={Springer}, 
+			}
 			</p>
 		</div>
 		
