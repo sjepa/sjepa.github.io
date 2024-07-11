@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0050)http://www.icst.pku.edu.cn/course/icb/MRS_MCI.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="language" content="english">
+<title>MaskCLR</title>
+<meta name="description" content="MaskCLR">
+<meta name="author" content="MaskCLR">
+<link rel="icon" type="image/x-icon" href="http://www.icst.pku.edu.cn/favicon.ico">
+<link rel="stylesheet" type="text/css" href="files/project.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script> 
+	function coming_soon()
+	{
+		alert("We are cleaning up our code to make it more simple and readable");
+	}
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$']]},
+        messageStyle: "none"
+    });</script>
+
+</head>
+
+
+	
+	
+
+<body>
+<div id="main">
+  
+	<div class="content"><br>
+		<div class="title">
+			<p class="banner" align="center"></p>
+			<h1>S-JEPA: Joint Embedding Predictive Architecture for Self-Supervised Skeletal Action Recognition </h1>
+		</div>
+		 <div class="description" style="font-size: 20px;">
+			<p style="text-align: center;">
+				<span style="margin-right: 20px;">Mohamed Abdelfattah</span>
+				<!-- <span style="margin-right: 20px;">Mariam Hassan</span> -->
+				<span>Alexandre Alahi</span>
+				
+				<br>
+				<br>
+				École Polytechnique Fédérale de Lausanne (EPFL)
+				<br>
+				firstname.lastname@epfl.ch
+			</p>
+		  </div>
+		  
+		<br><hr>
+		<div class="teaser sec" style="text-align:center;">
+			<img src="./files/teaser2.pdf" alt="Teaser" width="100%">
+			<p style="text-align: left;"><strong>Comparison between the prediction targets of previous work and S-JEPA (ours).</strong>. 
+				Instead of raw 3D coordinates, S-JEPA predicts the abstract representations of 3D skeletons, embedded by a transformer encoder, 
+				effectively learning more informative high-level depth and context features for the action recognition task.</p>
+		</div>
+		
+
+		<div class="abstract_sec">
+		  <h2>Abstract</h2>
+		  <div class="description">
+			<p style="text-align: left;">
+				Masked self-reconstruction of joints has been shown to be a promising pretext task for self-supervised skeletal action recognition. 
+				However, this task focuses on predicting isolated, potentially noisy, joint coordinates, which results in inefficient utilization of the model capacity. 
+				In this paper, we introduce <strong>S-JEPA</strong>, <strong>S</strong>keleton <strong>J</strong>oint <strong>E</strong>mbedding 
+				<strong>P</strong>redictive <strong>A</strong>rchitecture, which uses a novel pretext task: 
+				Given a partial 2D skeleton sequence, our objective is to predict the latent representations of its 3D counterparts. 
+				Such representations serve as abstract prediction targets that direct the modelling power towards learning the high-level context and depth information, 
+				instead of unnecessary low-level details. To tackle the potential non-uniformity in these representations, 
+				we propose a simple centering operation that is found to benefit training stability, effectively leading to strong off-the-shelf action representations. 
+				Extensive experiments show that S-JEPA, combined with the vanilla transformer, outperforms previous state-of-the-art results on 
+				NTU60, NTU120, and PKU-MMD datasets.
+
+			</p>
+		  </div>
+		</div>
+		
+		<!-- <div class="content has-text-justified">
+			<div class="description">
+				<p style="text-align: left;">
+					Examples of model predictions under noisy skeletons. MaskCLR is more robust to noise, compared to MotionBERT using the same DSTFormer backbone.
+				</p>
+			</div>
+			<img src="./files/robust_recog_003.gif" alt="Gif for Robust Recognition" height="50%">
+		</div> -->
+	
+		<div class="Framework sec">
+			<h2>Framework</h2>
+			<img src="./files/sjepa_arch2.pdf" alt="Framework" width="100%">
+			<p style="text-align: left;"> <strong>First, the 2D skeletons (view) are obtained by the orthographic projection and masking of the 3D ones (target). 
+				The 2D skeletons are passed through the view encoder, after which learnable mask tokens are inserted at the locations of masked joints to get the 
+				view features. The predictor takes Fv as input and outputs the predicted representations of the 
+				3D skeletons at the locations of the mask tokens. The target representations are obtained by the target encoder, which takes 
+				standard 3D skeletons as input, and is updated through the Exponential Moving Average (EMA) of the view encoder weights after each iteration 
+				(sg denotes stop gradient). The centering and softmax operations aid in stabilizing the training loss. At fine-tuning and test times, 
+				only the target encoder weights are used.</p>
+			</div>
+
+		<div class="experiments_sec">
+			<h2>Results</h2>
+			<div class="picture_wrapper" width="100%">
+				<img src="./files/sjepa_table1.png" alt="Results" width="100%">
+				</br>
+				<img src="./files/sjepa_table2.png" alt="Results" width="100%">
+				</br>	
+				<!-- <img src="./files/feature_space.png" alt="Results" width="100%"> -->
+			</div>
+		</div>
+		  
+		
+	  	<div class="download_sec">
+			<h2>Resources</h2>
+			<div>
+				<!-- <li><strong>Paper</strong>:  <a href="https://openreview.net/pdf?id=PVpfUEF3ze">OpenReview</a></li> -->
+				<li><strong>Supplementary material</strong>: <a href="https://www.dropbox.com/scl/fi/z5i19n9fkr89q1i29xlei/supplementary.pdf?rlkey=o6tdxlgp44p31af93qx3gnfi9&dl=0">Dropbox link</a></li>
+				<!-- <li><strong>Code</strong>:  Coming soon</li> -->
+				<!-- <a href="https://anonymous.4open.science/r/MaskCLR-A503">Coming soon</a> -->
+
+			</div>
+		</div>
+
+		<div class="citation_sec">
+			<h2>Citation</h2>
+			<p class="bibtex">@inproceedings{lin2023actionlet, 
+			&nbsp;&nbsp; author={Abdelfattah, Mohamed and Alahi, Alexandre}, 
+			&nbsp;&nbsp; booktitle={European Conference on Computer Vision (ECCV)}, 
+			&nbsp;&nbsp; title={S-JEPA: Joint Embedding Predictive Architecture for Self-Supervised Skeletal Action Recognition}, 
+			&nbsp;&nbsp; year={2024}, 
+			&nbsp;&nbsp; organization={Springer}, 
+			&nbsp;&nbsp; }
+			</p>
+		</div>
+		
+		
+       <div>
+          <h2>Reference</h2>
+            <p>[1]. Mao, Y., Deng, J., Zhou, W., Fang, Y., Ouyang, W., & Li, H. (2023). Masked motion predictors are strong 3d action representation learners. In Proceedings of CVPR.</p>
+			<p>[2]. Yan, H., Liu, Y., Wei, Y., Li, Z., Li, G., & Lin, L. (2023). Skeletonmae: graph-based masked autoencoder for skeleton sequence pre-training. In Proceedings of ICCV.</p>
+			<p>[3]. Shahroudy Amir, Jun Liu, Tian-Tsong Ng, and Gang Wang. "Ntu rgb+ d: A large scale dataset for 3d human activity analysis." In Proceedings of the IEEE conference on computer vision and pattern recognition, 2016.</p>
+        </div>
+	
+  </div>
+</div>
+
+
+</body></html>
