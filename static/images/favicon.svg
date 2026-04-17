@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="S-JEPA favicon">
+  <defs>
+    <linearGradient id="bg" x1="16%" y1="12%" x2="86%" y2="92%">
+      <stop offset="0%" stop-color="#0b1320" />
+      <stop offset="55%" stop-color="#10233c" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="arc" x1="20%" y1="20%" x2="85%" y2="85%">
+      <stop offset="0%" stop-color="#93c5fd" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <linearGradient id="joint" x1="24%" y1="18%" x2="78%" y2="84%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="30" fill="url(#bg)" />
+  <rect x="10" y="10" width="108" height="108" rx="24" fill="none" stroke="rgba(255,255,255,0.12)" />
+
+  <path
+    d="M87 35c-6-6-14-10-24-10-18 0-33 12-38 29"
+    fill="none"
+    stroke="url(#arc)"
+    stroke-linecap="round"
+    stroke-width="10"
+  />
+  <path
+    d="M41 93c6 6 14 10 24 10 18 0 33-12 38-29"
+    fill="none"
+    stroke="url(#arc)"
+    stroke-linecap="round"
+    stroke-width="10"
+    opacity="0.92"
+  />
+
+  <path
+    d="M79 33h-23c-12 0-19 6-19 16 0 10 7 16 19 16h15c10 0 15 4 15 11 0 8-6 12-17 12H44"
+    fill="none"
+    stroke="#ffffff"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="10"
+  />
+
+  <circle cx="41" cy="54" r="7.5" fill="url(#joint)" />
+  <circle cx="87" cy="74" r="7.5" fill="url(#joint)" />
+  <circle cx="64" cy="64" r="6.5" fill="#dbeafe" opacity="0.95" />
+</svg>

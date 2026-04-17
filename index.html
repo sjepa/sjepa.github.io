@@ -1,126 +1,299 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<!-- saved from url=(0050)http://www.icst.pku.edu.cn/course/icb/MRS_MCI.html -->
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="language" content="english">
-<title>S-JEPA</title>
-<meta name="description" content="S-JEPA">
-<meta name="author" content="S-JEPA">
-<link rel="icon" type="image/x-icon" href="http://www.icst.pku.edu.cn/favicon.ico">
-<link rel="stylesheet" type="text/css" href="files/project.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="description"
+    content="S-JEPA is a joint embedding predictive architecture for self-supervised skeletal action recognition that predicts latent representations of missing joints instead of raw coordinates."
+  >
+  <meta
+    name="keywords"
+    content="S-JEPA, skeletal action recognition, self-supervised learning, JEPA, transformer, skeleton representation learning"
+  >
+  <meta property="og:title" content="S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition">
+  <meta
+    property="og:description"
+    content="Predict high-level latent skeleton representations, not raw 3D coordinates, for stronger self-supervised action representations."
+  >
+  <meta property="og:image" content="./static/images/teaser.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition</title>
 
-<script> 
-	function coming_soon()
-	{
-		alert("We are cleaning up our code to make it more simple and readable");
-	}
-	</script>
-	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-	<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$']]},
-        messageStyle: "none"
-    });</script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/index.js"></script>
 </head>
+<body class="sjepa-site">
 
-
-<body>
-<div id="main">
-  
-	<div class="content"><br>
-		<div class="title">
-			<p class="banner" align="center"></p>
-			<h1>S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition</h1>
-		</div>
-		 <div class="description" style="font-size: 20px;">
-			<p style="text-align: center;">
-				<span style="margin-right: 20px;">Mohamed Abdelfattah</span>
-				<!-- <span style="margin-right: 20px;">Mariam Hassan</span> -->
-				<span>Alexandre Alahi</span>
-				
-				<br>
-				<br>
-				École Polytechnique Fédérale de Lausanne (EPFL)
-				<br>
-				firstname.lastname@epfl.ch
-			</p>
-		  </div>
-		  
-		<br><hr>
-		<div class="teaser sec" style="text-align:center;">
-			<img src="./files/teaser3.pdf" alt="Teaser" width="100%">
-			<p style="text-align: left;"><strong>Comparison between the prediction targets of previous work and S-JEPA (ours).</strong>. 
-				Instead of raw 3D coordinates, S-JEPA predicts the abstract representations of 3D skeletons, embedded by a transformer encoder, 
-				effectively learning more informative high-level depth and context features for the action recognition task.</p>
-		</div>
-		
-
-		<div class="abstract_sec">
-		  <h2>Abstract</h2>
-		  <div class="description">
-			<p style="text-align: left;">
-				Masked self-reconstruction of joints has been shown to be a promising pretext task for self-supervised skeletal action recognition. 
-				However, this task focuses on predicting isolated, potentially noisy, joint coordinates, which results in inefficient utilization of the model capacity. 
-				In this paper, we introduce <strong>S-JEPA</strong>, <strong>S</strong>keleton <strong>J</strong>oint <strong>E</strong>mbedding 
-				<strong>P</strong>redictive <strong>A</strong>rchitecture, which uses a novel pretext task: 
-				Given a partial skeleton sequence, predict the latent representations of the missing joints of the same sequence. 
-				Such representations serve as abstract prediction targets that direct the modelling power towards learning the high-level context and depth information, 
-				instead of unnecessary low-level details. To tackle the potential non-uniformity in these representations, we propose a simple centering operation that is 
-				found to benefit training stability, effectively leading to strong off-the-shelf action representations. 
-				Extensive experiments show that S-JEPA, combined with the vanilla transformer, outperforms previous state-of-the-art results on NTU60, NTU120, and PKU-MMD datasets.
-
-			</p>
-		  </div>
-		</div>
-		
-	
-		<div class="Framework sec">
-			<h2>Framework</h2>
-			<img src="./files/sjepa_arch3.pdf" alt="Framework" width="100%">
-			<p style="text-align: left;"> <strong>Overview of S-JEPA.</strong> First, diverse skeleton views are obtained by applying geometric transformations on the 3D skeletons. 
-				The view skeletons are passed through the view encoder, after which learnable mask tokens are inserted at the locations of masked joints to get the view features. 
-				The predictor takes the view features as input and outputs the predicted representations $\mathbf{R}_p$ of the missing joints at the locations of the mask tokens. 
-				The target representations $\mathbf{R}_t$ are obtained by the target encoder, which takes unmasked 3D skeletons as input, and is updated through 
-				the Exponential Moving Average (EMA) of the view encoder weights after each iteration (sg denotes stop gradient). 
-				The centering and softmax operations aid in stabilizing the training loss. 
-				At fine-tuning and test times, only the target encoder weights are used.</p>
-			</div>
-
-		<div class="experiments_sec">
-			<h2>Results</h2>
-			<div class="picture_wrapper" width="100%">
-				<img src="./files/sjepa_table1.png" alt="Results" width="100%">
-				</br>
-				<img src="./files/sjepa_table2.png" alt="Results" width="100%">
-				</br>	
-			</div>
-		</div>
-		  
-	
-
-		<div class="citation_sec">
-			<h2>Citation</h2>
-			<p class="bibtex">@inproceedings{abdelfattah2024sjepa, 
-			author={Abdelfattah, Mohamed and Alahi, Alexandre}, 
-			booktitle={European Conference on Computer Vision (ECCV)}, 
-			title={S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition}, 
-			year={2024}, 
-			organization={Springer}, 
-			}
-			</p>
-		</div>
-		
-		
-       <div>
-          <h2>Reference</h2>
-            <p>[1]. Mao, Y., Deng, J., Zhou, W., Fang, Y., Ouyang, W., & Li, H. (2023). Masked motion predictors are strong 3d action representation learners. In Proceedings of CVPR.</p>
-			<p>[2]. Yan, H., Liu, Y., Wei, Y., Li, Z., Li, G., & Lin, L. (2023). Skeletonmae: graph-based masked autoencoder for skeleton sequence pre-training. In Proceedings of ICCV.</p>
-			<p>[3]. Shahroudy Amir, Jun Liu, Tian-Tsong Ng, and Gang Wang. "Ntu rgb+ d: A large scale dataset for 3d human activity analysis." In Proceedings of the IEEE conference on computer vision and pattern recognition, 2016.</p>
+<section class="hero publication-hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="publication-grid">
+        <div class="hero-topbar">
+          <span class="conference-badge">ECCV 2024</span>
         </div>
-	
+
+        <div class="hero-copy hero-copy-centered">
+          <p class="hero-eyebrow">Self-Supervised Skeleton Representation Learning</p>
+          <h1 class="title publication-title">
+            <span class="title-line">S-JEPA: A Joint Embedding Predictive</span>
+            <span class="title-line">Architecture for Skeletal Action Recognition</span>
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://moo-osama.github.io/" target="_blank" rel="noopener">Mohamed Abdelfattah</a><sup>*</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/alexandre-alahi-ph-d-834842/" target="_blank" rel="noopener">Alexandre Alahi</a>
+            </span>
+          </div>
+
+          <div class="publication-affiliations">
+            <img
+              src="./static/images/epfl_logo.svg.png"
+              alt="EPFL logo"
+              class="affiliation-logo"
+            >
+            <p class="affiliation-copy">École polytechnique fédérale de Lausanne (EPFL)</p>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a
+                href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf"
+                class="external-link button is-medium is-rounded paper-button"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper PDF</span>
+              </a>
+            </span>
+          </div>
+
+          <div class="hero-summary content">
+            <p>
+              S-JEPA predicts latent joint representations instead of reconstructing raw coordinates.
+              The result is stronger and more transferable skeleton features.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
+<section class="section teaser-section content-section">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered section-heading">
+      <p class="section-tag">High-Level Idea</p>
+      <h2 class="title is-3 section-title">Predict semantic motion cues instead of raw coordinates</h2>
+    </div>
+    <div class="figure-card">
+      <img
+        src="./static/images/teaser.png"
+        alt="Comparison between previous masked prediction targets and S-JEPA latent representation targets"
+        class="figure-image"
+      >
+    </div>
+    <div class="teaser-caption content has-text-centered">
+      <p>
+        Instead of recovering noisy low-level joint coordinates, S-JEPA predicts abstract latent targets.
+        That shift pushes the model toward context, structure, and action semantics.
+      </p>
+    </div>
+  </div>
+</section>
 
-</body></html>
+<section class="section section-soft content-section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="section-heading">
+          <p class="section-tag">Abstract</p>
+          <h2 class="title is-3 section-title">A cleaner pretraining target for action understanding</h2>
+        </div>
+        <div class="content has-text-justified abstract-copy">
+          <p>
+            Masked self-reconstruction is effective for skeletal action recognition, but raw coordinate
+            targets can overemphasize noisy local details. S-JEPA replaces those targets with latent
+            representations of missing joints from the same sequence.
+          </p>
+          <p>
+            This objective encourages the model to capture higher-level context and depth cues.
+            A simple centering operation further stabilizes training.
+          </p>
+          <p>
+            With a vanilla transformer backbone, S-JEPA reaches state-of-the-art performance on
+            NTU60, NTU120, and PKU-MMD across linear probing, fine-tuning, semi-supervised learning,
+            and transfer learning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section figure-section content-section">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered section-heading">
+      <p class="section-tag">Method</p>
+      <h2 class="title is-3 section-title">A simple pipeline with a more meaningful objective</h2>
+    </div>
+    <div class="figure-card figure-card-wide">
+      <img
+        src="./static/images/main_figure.png"
+        alt="Overview diagram of the S-JEPA architecture"
+        class="figure-image"
+      >
+    </div>
+    <div class="main-figure-description content has-text-justified">
+      <p>
+        S-JEPA uses motion-aware masking, a view encoder, an EMA target encoder, and latent-space
+        cross-entropy to learn stronger skeleton representations.
+      </p>
+      <p>
+        The method keeps the architecture simple while moving the learning signal to a more useful target space.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section content-section">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered section-heading">
+      <p class="section-tag">Method Highlights</p>
+      <h2 class="title is-3 section-title">Design choices that make the representation stronger</h2>
+    </div>
+    <div class="columns is-multiline feature-grid">
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-mask"></i></span>
+          <h3 class="title is-5">Motion-aware masking</h3>
+          <p>Informative joints are masked more often so prediction remains meaningful.</p>
+        </article>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-project-diagram"></i></span>
+          <h3 class="title is-5">Latent target prediction</h3>
+          <p>The predictor matches latent targets instead of regressing raw coordinates.</p>
+        </article>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-sync-alt"></i></span>
+          <h3 class="title is-5">EMA target encoder</h3>
+          <p>A momentum encoder provides stable targets and helps avoid collapse.</p>
+        </article>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-compass"></i></span>
+          <h3 class="title is-5">Geometric views</h3>
+          <p>Rotations, translations, and flips improve robustness without changing semantics.</p>
+        </article>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-bullseye"></i></span>
+          <h3 class="title is-5">Centered targets</h3>
+          <p>Centering and sharpening improve convergence and feature quality.</p>
+        </article>
+      </div>
+      <div class="column is-4-desktop is-12-tablet">
+        <article class="feature-card">
+          <span class="feature-icon"><i class="fas fa-layer-group"></i></span>
+          <h3 class="title is-5">Simple backbone</h3>
+          <p>A vanilla transformer is enough when the pretraining target is chosen well.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft content-section">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered section-heading">
+      <p class="section-tag">Selected Results</p>
+      <h2 class="title is-3 section-title">Strong transfer across evaluation protocols</h2>
+    </div>
+    <div class="columns is-multiline feature-grid result-grid">
+      <div class="column is-3-desktop is-6-tablet">
+        <article class="result-card">
+          <p class="result-label">Linear Eval</p>
+          <p class="result-value">89.8%</p>
+          <p class="result-detail">NTU60 XView with frozen features.</p>
+        </article>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <article class="result-card">
+          <p class="result-label">Fine-Tuning</p>
+          <p class="result-value">97.6%</p>
+          <p class="result-detail">Best NTU60 XView result reported in the paper.</p>
+        </article>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <article class="result-card">
+          <p class="result-label">Semi-Supervised</p>
+          <p class="result-value">67.5%</p>
+          <p class="result-detail">NTU60 XSub with only 1% labels.</p>
+        </article>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <article class="result-card">
+          <p class="result-label">Transfer</p>
+          <p class="result-value">74.2%</p>
+          <p class="result-detail">Best PKU-II transfer result when pretrained on NTU120.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section content-section">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered section-heading">
+      <p class="section-tag">Citation</p>
+      <h2 class="title is-3 section-title">Reference the paper</h2>
+    </div>
+    <div class="citation-shell">
+      <button
+        class="button is-small is-rounded"
+        id="copy-citation-button"
+        aria-label="Copy citation"
+        title="Copy citation"
+      >
+        <span class="icon is-small"><i class="fas fa-copy"></i></span>
+      </button>
+      <pre id="citation-text">@inproceedings{abdelfattah2024s,
+  title={S-jepa: A joint embedding predictive architecture for skeletal action recognition},
+  author={Abdelfattah, Mohamed and Alahi, Alexandre},
+  booktitle={European Conference on Computer Vision},
+  pages={367--384},
+  year={2024},
+  organization={Springer}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<footer class="footer site-footer">
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered footer-copy">
+      <p>
+        This page summarizes <em>S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition</em>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
